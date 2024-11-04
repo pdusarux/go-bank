@@ -22,22 +22,24 @@ func main() {
 	db := initDB()
 
 	customerRepositoryDB := repository.NewCustomerRepositoryDB(db)
-	customerRepositoryMock := repository.NewCustomerRepositoryMock()
-	_ = customerRepositoryMock
-
 	customerService := service.NewCustomerService(customerRepositoryDB)
 	customerHandler := handler.NewCustomerHandler(customerService)
 
+	accountRepositoryDB := repository.NewAccountRepositoryDB(db)
+	accountService := service.NewAccountService(accountRepositoryDB)
+	accountHandler := handler.NewAccountHandler(accountService)
+
 	r := gin.Default()
 
-	// Set trusted proxies (replace with your actual proxy IPs)
-	r.SetTrustedProxies([]string{"192.168.1.1", "192.168.1.2"}) // Example IPs
+	r.SetTrustedProxies([]string{"192.168.1.1", "192.168.1.2"})
 
 	r.GET("/customers", customerHandler.GetCustomers())
 	r.GET("/customers/:customer_id", customerHandler.GetCustomer())
 
-	logs.Info("Starting server on port", zap.Int("port", viper.GetInt("app.port")))
+	r.POST("/customers/:customer_id/accounts", accountHandler.NewAccount)
+	r.GET("/customers/:customer_id/accounts", accountHandler.GetAccounts)
 
+	logs.Info("Starting server on port", zap.Int("port", viper.GetInt("app.port")))
 	r.Run(fmt.Sprintf(":%d", viper.GetInt("app.port")))
 
 }
