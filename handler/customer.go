@@ -20,7 +20,7 @@ func (h customerHandler) GetCustomers() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		customers, err := h.custSrv.GetCustomers()
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			handleError(ctx, err)
 			return
 		}
 
@@ -32,12 +32,13 @@ func (h customerHandler) GetCustomer() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		customerID, err := strconv.Atoi(ctx.Param("customer_id"))
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid customer ID"})
+			handleError(ctx, err)
 			return
 		}
+
 		customer, err := h.custSrv.GetCustomer(customerID)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			handleError(ctx, err)
 			return
 		}
 

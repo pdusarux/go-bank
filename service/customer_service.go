@@ -2,7 +2,8 @@ package service
 
 import (
 	"database/sql"
-	"errors"
+	"go-bank/errs"
+	"go-bank/logs"
 	"go-bank/repository"
 )
 
@@ -17,7 +18,8 @@ func NewCustomerService(custRepo repository.CustomerRepository) customerService 
 func (s customerService) GetCustomers() ([]CustomerResponse, error) {
 	customers, err := s.custRepo.GetAll()
 	if err != nil {
-		return nil, err
+		logs.Error(err)
+		return nil, errs.NewUnexpectedError()
 	}
 
 	custResponses := []CustomerResponse{}
@@ -38,9 +40,11 @@ func (s customerService) GetCustomer(id int) (*CustomerResponse, error) {
 	customer, err := s.custRepo.GetById(id)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errors.New("customer not found")
+			return nil, errs.NewNotFoundError("customer not found")
 		}
-		return nil, err
+
+		logs.Error(err)
+		return nil, errs.NewUnexpectedError()
 	}
 
 	custResponse := CustomerResponse{

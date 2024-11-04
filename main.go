@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-bank/handler"
+	"go-bank/logs"
 	"go-bank/repository"
 	"go-bank/service"
 	"strings"
@@ -12,6 +13,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -28,8 +30,13 @@ func main() {
 
 	r := gin.Default()
 
+	// Set trusted proxies (replace with your actual proxy IPs)
+	r.SetTrustedProxies([]string{"192.168.1.1", "192.168.1.2"}) // Example IPs
+
 	r.GET("/customers", customerHandler.GetCustomers())
 	r.GET("/customers/:customer_id", customerHandler.GetCustomer())
+
+	logs.Info("Starting server on port", zap.Int("port", viper.GetInt("app.port")))
 
 	r.Run(fmt.Sprintf(":%d", viper.GetInt("app.port")))
 
