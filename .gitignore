@@ -26,3 +26,8 @@ go.work.sum
 
 # config file
 config.yaml
+
+# image
+*.png
+*.jpg
+*.jpeg

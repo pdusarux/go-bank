@@ -2,6 +2,8 @@
 
 A simple banking API built with Go, using the Gin framework and PostgreSQL database, following the hexagonal architecture.
 
+![Hexagonal Architecture](./hex_arch.png)
+
 ## Features
 
 - Get all customers
@@ -68,3 +70,10 @@ A simple banking API built with Go, using the Gin framework and PostgreSQL datab
 
 - `GET /customers` - Retrieve all customers
 - `GET /customers/:customer_id` - Retrieve a customer by ID
+
+## Credit
+
+This project was created by CodeBangkok. Special thanks to CodeBangkok for the guidance in building a hexagonal architecture.
+
+- [CodeBangkok](https://www.youtube.com/@CodeBangkok)
+- [Hexagonal Architecture](https://www.youtube.com/watch?v=k3JZI-sQs2k&list=PLyZTXfAT27ib7T9Eg3qhvDE5rgvjQk4OL&index=11)
